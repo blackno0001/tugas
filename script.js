@@ -200,7 +200,47 @@ const BMI_CATEGORIES = {
     document.getElementById('result').classList.add('d-hidden');
     document.getElementById('form').scrollIntoView({ behavior: 'smooth' });
   };
+
+  function downloadBMI() {
+    // Ambil data BMI dan status dari tampilan hasil
+    const bmi = document.getElementById('result-bmi').innerText;
+    const status = document.getElementById('result-title').innerText;
+    const desc = document.getElementById('result-desc').innerText;
+    const suggestion = document.getElementById('suggestion-text').innerText;
+    const advice = document.getElementById('advice-text').innerText;
   
+    // Ambil daftar risiko penyakit
+    const riskList = Array.from(document.getElementById('list-risk').children)
+      .map((item) => `- ${item.innerText}`)
+      .join('\n');
+  
+    // Membuat konten file
+    const content = `
+  Hasil BMI Anda:
+  - BMI: ${bmi}
+  - Status: ${status}
+  - Deskripsi: ${desc}
+  - Saran: ${suggestion}
+  - Saran Gaya Hidup: ${advice}
+  - Risiko Penyakit:
+  ${riskList}
+  `;
+  
+    // Membuat blob file teks
+    const blob = new Blob([content], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+  
+    // Membuat elemen <a> untuk unduhan
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "hasil_BMI.txt"; // Nama file
+    a.click();
+  
+    // Membersihkan URL blob
+    URL.revokeObjectURL(url);
+  }
+  
+
   /**
    * Sumber:
    * Resiko Penyakit Kekurangan Berat Badan: https://www.alodokter.com/faktor-penyebab-badan-kurus-dan-tips-sehat-untuk-mengatasinya/ Diakses pada 18 July 2023
